@@ -1,0 +1,85 @@
+En la DAO
+	1. Definimos la interfaz con JpaRepository (AgendaJpaSpring)
+	2. Definimos la interfaz con las operaciones que nos interesan (AgendaDao)
+	3. Definimos la clase que implementa AgendaDao (AgendaDaoImpl) => La anotamos @Repository
+		Dentro de ella 
+			declaramos una variable del tipo JpaRepository y la anotamos con @Autowired,
+				@Autowired
+				AgendaJpaSpring agendaJpaSpring;
+			en este momento, Spring Data JPA resuelve una implementación 
+			de los métodos de JpaRepository, esto significa que se establece la instrucción JPQL que enviará a la capa de persistencia.
+			La implementación de los métodos AgendaDao  se hace usando la interfaz Jpa que hemos inyectado.
+			
+		4. JPA se encarga de acceder a la capa de datos como si fueran objetos en memoria (¿es esto la capa de persistencia?)
+		5. Luego el MOTOR es el que hace las operaciones contra la base de datos real. (Usando SQL gracias al Driver) ¿Qué es exactamente el MOTOR?
+		
+En la capa service
+	1. Se define la interfaz con los métodos que nos interesen
+	2. Definimos la clase que implementa y la anotamos con @Service
+	3. Se inyecta la interfaz del DAO para poder usar sus métodos.
+		@Autowired
+		AgendaDao agendaDao;
+	4. Se implementan los métodos llamando a agendaDao y haciendo la lógica necesaria.
+
+En la capa controller
+	1. Definimos la clase y la anotamos con @RestController
+	2. Se inyecta la interfaz del Service para poder usar sus métodos
+			@Autowired
+			AgendaService agendaService;
+	3. Se implementan los métodos del controlador llamando a agendaService y hacieno la lógica necesaria.
+
+
+Tenemos que meter la configuración en la clase principal (Application) para idicarle a Spring
+	1. Donde están los paquetes que tiene que escanear
+		@ComponentScan(basePackages = {"controller","service","dao"})
+	2. Donde están las entidades
+		@EntityScan(basePackages = {"model"})
+	3. Dónde está clase que implementa el JpaRepository
+	
+Lo último que nos queda por hacer es definir las propiedades.
+	1. Las propiedades de coniguración de la base de datos.
+	
+		CON ESTO LE ESTAMOS DANDO LA INFROMACIÓN AL MOTOR DE PERSISTENCIA PARA QUE HAGA SU TRABAJO
+			2. Todo lo que se hace en la capa de persistencia después se tiene que llevar a la base de datos
+			   de esto se encarga por debajo em MOTOR de Hibernate, que es el driver.
+			3. La cadena de conexión , usuario y contraseña
+			4. Propiedades para que hibernate cree adecuadamente las instrucciones SQL
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Vamos a meter un añadir un cliente front en javaScript para acceder a nuestro microservicio de contactos.
+	1. Añadir esta anotación en el Controller: @CrossOrigin(origins = "*"). Su objetivo es evitar que se boqueen las peticiones procedentes de un javaScript.
+		Los servicios los bloquean por temas de seguridad
+		
+			@CrossOrigin(origins = "*") Esto significa que cualquier origen puede acceder a este contoller, incluyendo una app javaScrit que se está ejecutando en
+										una página web
+	2. Inicamos el servicio y ejecutamos el html desde el navegador
+	
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Generar el .jar (aplicación java independiente). Este jar se ejecuta en cualquier máquina, ejecutandose el servidor de aplicaciones TOMCAT que lleva embebido y desplegando en el el servicio.
+				 
+
+	1. Quitamos una dependencia (librería) queno vamos a necesitar en el DESPLEGABLE (.jar) fina y 
+		que nos puede generar algún problema por tema de versiones
+		
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<scope>test</scope>
+			</dependency>
+			
+	2. La generación del .jar se hace con Maven build...
+			Le indicamos en Goals, que lo que queremos hacer es un despliegue: Goals: deploy
+			
+	3. Esta aquí: C:\Users\avidalt\Desktop\ADRI_apuntes\CURSOS\Microservicios_Spring_Boot_y_Docker\workspace_curso\04_microservicio_contactos\target\04_microservicio_contactos-0.0.1-SNAPSHOT
+	
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+En este momento ya tenemos en el .jar nuestro servicio, listo para ser desplegado en la nube y que se puede emplear libremente por los clientes.
+
+Deplegar NO ES MÁS QUE COPIAR EL ARCHIVO done queramos tenerlo, puede estar en cualquier equipo en la nube simplemente ejecutandlo con el comando que ponemos a continuación.
+
+Hacemos un ejemplo en local
+	¿cómo se pone en ejecución? \target>java -jar contactos.jar (También se podría porner en un .bat para que de esa manera el usuario final pudiera pudiera simplemente darle doble click y se ejecutara el servicio)
+	Una vez hemos puesto en ejecución el servicio, esta a disposición de los clientes en la máquina que lo hayamos puesto. (En este caso http://localhost:8080/contactos)
+	
+Si la maquina donde se está ejecutando tuviera una IP pública cualquier cliente podría acceder a dicho servicio.
