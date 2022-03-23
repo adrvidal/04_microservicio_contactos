@@ -11,8 +11,8 @@ En la DAO
 			de los métodos de JpaRepository, esto significa que se establece la instrucción JPQL que enviará a la capa de persistencia.
 			La implementación de los métodos AgendaDao  se hace usando la interfaz Jpa que hemos inyectado.
 			
-		4. JPA se encarga de acceder a la capa de datos como si fueran objetos en memoria (¿es esto la capa de persistencia?)
-		5. Luego el MOTOR es el que hace las operaciones contra la base de datos real. (Usando SQL gracias al Driver) ¿Qué es exactamente el MOTOR?
+		4. JPA se encarga de acceder a la capa de datos como si fueran objetos en memoria.
+		5. Luego el MOTOR es el que hace las operaciones contra la base de datos real. (Usando SQL gracias al Driver)
 		
 	LA CAPA DE PERSISTENCIA
 	Cuando hablamos de capa de persistencia nos referimos a
