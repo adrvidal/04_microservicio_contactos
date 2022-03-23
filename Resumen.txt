@@ -9,7 +9,8 @@ En la DAO
 				AgendaJpaSpring agendaJpaSpring;
 			en este momento, Spring Data JPA resuelve una implementación 
 			de los métodos de JpaRepository, esto significa que se establece la instrucción JPQL que enviará a la capa de persistencia.
-			La implementación de los métodos AgendaDao  se hace usando la interfaz Jpa que hemos inyectado.
+			La implementación de los métodos AgendaDao se hace usando la interfaz Jpa que hemos inyectado, es decir, es en esta capa donde
+			se utilizamos JPA-
 			
 		4. JPA se encarga de acceder a la capa de datos como si fueran objetos en memoria.
 		5. Luego el MOTOR es el que hace las operaciones contra la base de datos real. (Usando SQL gracias al Driver)
